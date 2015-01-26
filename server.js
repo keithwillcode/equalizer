@@ -8,7 +8,7 @@ var app = express();
 app.use(express.query());
 app.use(express.bodyParser());
 
-app.get('/audio/download', _audioController.download);
+app.get('/audio/download/:name', _audioController.download);
 
 app.use(express.static('static'));
 

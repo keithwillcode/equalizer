@@ -1,7 +1,7 @@
 var audioController = function audioController() {
     this.download = function (request, response) {
         var fs = require('fs');
-        var songName = '01 Something from Nothing.m4a';
+        var songName = request.params.name;
         var songBytes = [];
 
         fs.readFile('./audio/' + songName, function(err, data) {

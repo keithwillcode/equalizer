@@ -5,13 +5,13 @@
     <title>Equalizer</title>
  
     <script type="text/javascript" src="scripts/main.js"></script>
+    <script type="text/javascript" src="scripts/buffer-loader.js"></script>
+    <script type="text/javascript" src="scripts/volume-sample.js"></script>
+    <script type="text/javascript" src="scripts/init.js"></script>
 </head>
 <body>
     <h2>Equalizer</h2>
-    <audio id="audio-element"
-           src="01 Something from Nothing.m4a"
-           controls="true"
-           style="width: 512px;">
-    </audio>
+    <button onclick="VolumeSample.toggle()">Play Foo Fighters</button>
+    <input type="range" min="0" max="100" value="100" oninput="VolumeSample.changeVolume(this);">
 </body>
 </html>
