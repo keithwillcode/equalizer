@@ -2,6 +2,8 @@
 var output = document.getElementById('output');
 var canvas = document.getElementById('equalizerCanvas');
 var canvasContext = canvas.getContext('2d');
+var colors = ['purple', 'blue', 'green', 'red'];
+var colorIndex = 0;
 
 var player = document.createElement('audio');
 var audio = document.createElement('audio');
@@ -52,7 +54,7 @@ function renderFrame (audio, analyser) {
   var columnHeight = canvas.height / 255;
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   canvasContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
-  canvasContext.strokeStyle = 'rgba(88, 197, 63, 0.6)';
+  canvasContext.strokeStyle = colors[colorIndex];
   canvasContext.lineCap = 'round';
   
   canvasContext.beginPath();
@@ -102,6 +104,13 @@ function dropAudio (event) {
       url = URL.createObjectURL(file);
       playAudio(url, file.name);
 }
+
+setInterval(function() {
+  if (colorIndex < colors.length - 1)
+    colorIndex++;
+  else
+    colorIndex = 0;
+}, 3000);
 
 $(window)
   .on('dragover', stopEvent)
