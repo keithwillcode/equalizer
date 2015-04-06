@@ -48,8 +48,8 @@ function renderFrame (audio, analyser) {
   analyser.getByteFrequencyData(frequencyData);
   frequencyData = reduce(frequencyData, canvas.width / 10);
   
-  var colWidth = canvas.width / frequencyData.length;
-  var colHeight = canvas.height / 255;
+  var columnWidth = canvas.width / frequencyData.length;
+  var columnHeight = canvas.height / 255;
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   canvasContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
   canvasContext.strokeStyle = 'rgba(88, 197, 63, 0.6)';
@@ -57,7 +57,7 @@ function renderFrame (audio, analyser) {
   canvasContext.beginPath();
   canvasContext.moveTo(0, canvas.height);
   for (var i = 1; i < frequencyData.length; i++) {
-    canvasContext.lineTo(i * colWidth, canvas.height - 10 - frequencyData[i] * colHeight);
+    canvasContext.lineTo(i * columnWidth, canvas.height - 10 - frequencyData[i] * columnHeight);
   }
   canvasContext.lineTo(canvas.width, canvas.height);
   canvasContext.closePath();
