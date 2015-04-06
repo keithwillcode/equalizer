@@ -6,7 +6,7 @@ h1, h2 {
     color: White;
     font-weight: lighter;
  	text-align: center;
- 	margin: 2em auto;
+ 	margin: 1em;
 }
 
 h2 {
@@ -24,8 +24,12 @@ h2 {
 	z-index: -1;
 }
 
+#controls {
+	display: flex;
+	align-items: center;
+  	justify-content: center;
+}
+
 #toggleTunes {
-	position: absolute;
-	left: 10px;
-	top: 10px;
+	outline: none;
 }

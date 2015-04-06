@@ -99,10 +99,11 @@ function pauseAudio() {
 }
 
 function dropAudio (event) {
+  $('#toggleTunes').fadeIn();
   stopEvent(event);
-  var file = event.originalEvent.dataTransfer.files[0],
-      url = URL.createObjectURL(file);
-      playAudio(url, file.name);
+  var file = event.originalEvent.dataTransfer.files[0];
+  var url = URL.createObjectURL(file);
+  playAudio(url, file.name);
 }
 
 setInterval(function() {
