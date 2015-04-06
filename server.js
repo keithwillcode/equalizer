@@ -1,12 +1,12 @@
 var express = require('express'); 
 var utils = require('./utilities.js');
 var audioController = require('./audioController.js');
+var bodyParser = require('body-parser');
 
 var _audioController = new audioController();
 
 var app = express();
 app.use(express.query());
-app.use(express.bodyParser());
 
 app.get('/audio/download/:name', _audioController.download);
 
