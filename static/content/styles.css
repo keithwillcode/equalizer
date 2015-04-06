@@ -24,7 +24,7 @@ h2 {
 	z-index: -1;
 }
 
-#pauseTunes {
+#toggleTunes {
 	position: absolute;
 	left: 10px;
 	top: 10px;

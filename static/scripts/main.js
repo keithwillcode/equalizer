@@ -53,6 +53,7 @@ function renderFrame (audio, analyser) {
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   canvasContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
   canvasContext.strokeStyle = 'rgba(88, 197, 63, 0.6)';
+  canvasContext.lineCap = 'round';
   
   canvasContext.beginPath();
   canvasContext.moveTo(0, canvas.height);
@@ -82,12 +83,14 @@ function playAudio (url, name) {
 }
 
 function continueAudio() {
+  $('#toggleTunes').html('Pause Tunes');
   audio.play();
   player.play();
   isPaused = false;
 }
 
 function pauseAudio() {
+  $('#toggleTunes').html('Continue Tunes');
   audio.pause();
   player.pause();
   isPaused = true;
@@ -105,7 +108,7 @@ $(window)
   .on('dragenter', stopEvent)
   .on('drop', dropAudio);
 
-$('#pauseTunes').on('click', function() {
+$('#toggleTunes').on('click', function() {
   if (isPaused)
     continueAudio();
   else
