@@ -27,6 +27,7 @@ if (!audioContext.createGain)
     audioContext.createGain = audioContext.createGainNode;
 
 var gainNode = audioContext.createGain();
+var panNode = audioContext.createStereoPanner();
 var analyser = audioContext.createAnalyser();
 
 chainSources();
@@ -36,7 +37,8 @@ windowResize();
 
 function chainSources() {
   source.connect(gainNode);
-  gainNode.connect(analyser);
+  gainNode.connect(panNode);
+  panNode.connect(analyser);
   analyser.connect(audioContext.destination);
 }
 
@@ -134,13 +136,16 @@ function toggleAudio () {
 
 function changeVolume(rangeElement) {
   var volume = rangeElement.value;
-  console.log(volume);
   var fraction = parseInt(rangeElement.value) / parseInt(rangeElement.max);
   gainNode.gain.value = fraction * fraction;
 }
 
 function changeSamples(rangeElement) {
   sampleSize = parseInt(rangeElement.value);
+}
+
+function changePan(rangeElement) {
+  panNode.pan.value = parseInt(rangeElement.value);
 }
 
 function askForDrop() {
