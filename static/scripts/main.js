@@ -105,6 +105,13 @@ function dropAudio (event) {
   playAudio(url, file.name);
 }
 
+function toggleAudio () {
+  if (isPaused)
+    continueAudio();
+  else
+    pauseAudio();
+}
+
 setInterval(function() {
   var r = getRandomNumberBetween(0, 256);
   var g = getRandomNumberBetween(0, 256);
@@ -120,11 +127,13 @@ function getRandomNumberBetween(from, to) {
 $(window)
   .on('dragover', stopEvent)
   .on('dragenter', stopEvent)
-  .on('drop', dropAudio);
+  .on('drop', dropAudio)
+  .keypress(function(e) {
+    if (e.keyCode == 0 || e.keyCode == 32) {
+      toggleAudio();
+    }
+  });
 
 $('#toggleTunes').on('click', function() {
-  if (isPaused)
-    continueAudio();
-  else
-    pauseAudio();
+  
 });
