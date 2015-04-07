@@ -3,6 +3,8 @@ var output = document.getElementById('output');
 var canvas = document.getElementById('equalizerCanvas');
 var canvasContext = canvas.getContext('2d');
 var color = 'rgba(88, 197, 67, 0.3)';
+var filesDropped = null;
+var audioIndex = 0;
 
 var player = document.createElement('audio');
 var audio = document.createElement('audio');
@@ -12,6 +14,12 @@ var animationFrame = null;
 var isPaused = false;
 
 document.body.appendChild(player);
+  audio.addEventListener('ended', function() {
+  audio.currentTime = 0;
+
+  if (audioIndex <= filesDropped.length - 1)
+    playAudio(filesDropped[audioIndex++]);
+});
 source = audioContext.createMediaElementSource(audio);
 source.connect(analyser);
 
@@ -71,14 +79,15 @@ function renderFrame (audio, analyser) {
   });
 }
 
-function playAudio (url, name) {
+function playAudio (file) {
+  var url = URL.createObjectURL(file);
   audio.autoplay = true;
   player.autoplay = true;
   audio.src = url;
   player.src = url;
   audio.play();
   player.play();
-  $('h1').html(name);
+  $('h1').html(file.name);
   cancelAnimationFrame(animationFrame);
   renderFrame(audio, analyser);
 }
@@ -100,9 +109,8 @@ function pauseAudio() {
 function dropAudio (event) {
   $('#toggleTunes').fadeIn();
   stopEvent(event);
-  var file = event.originalEvent.dataTransfer.files[0];
-  var url = URL.createObjectURL(file);
-  playAudio(url, file.name);
+  filesDropped = event.originalEvent.dataTransfer.files;
+  playAudio(filesDropped[audioIndex++]);
 }
 
 function toggleAudio () {
