@@ -150,8 +150,8 @@ function changeSamples(rangeElement) {
   sampleSize = parseInt(rangeElement.value);
 }
 
-function changePan(rangeElement) {
-  panNode.pan.value = parseInt(rangeElement.value);
+function changePan(value) {
+  panNode.pan.value = value;
 }
 
 function askForDrop() {
@@ -184,4 +184,9 @@ $(window)
 $('#toggleTunes').on('click', function(e) {
   toggleAudio();
   this.blur();
+});
+
+$('.pan-control').on('click', 'span', function(e) {
+  var panValue = parseInt($(e.target).parent().data('pan-value'));
+  changePan(panValue);
 });

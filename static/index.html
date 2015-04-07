@@ -16,7 +16,12 @@
     	</button> 
     	<h2>Volume</h2> <input id="volumeControl" type="range" min="0" max="100" value="100" oninput="changeVolume(this);">
     	<h2>Samples</h2> <input id="samplesControl" type="range" min="1" max="15" value="5" oninput="changeSamples(this);">
-    	<h2>Pan</h2> <input id="panControl" type="range" min="-1" max="1" value="0" oninput="changePan(this);">
+    	<h2>Pan</h2> 
+    	<div class="btn-group">
+	        <button type="button" class="btn btn-default pan-control" aria-label="Left Align" data-pan-value="-1"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></button>
+	        <button type="button" class="btn btn-default  pan-control" aria-label="Justify" data-pan-value="0"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></button>	        
+	        <button type="button" class="btn btn-default  pan-control" aria-label="Right Align" data-pan-value="1"><span class="glyphicon glyphicon-align-right" aria-hidden="true"></span></button>
+      	</div>
     </div>
     
 	<canvas id="equalizerCanvas"></canvas>    
