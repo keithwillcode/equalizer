@@ -13,13 +13,12 @@
 </head>
 <body>
     <h1>Equalizer - Drop a <em>Jam!</em> </h1>
-    <div id="controls">
-    	<button id="toggleTunes" class="btn btn-lg btn-primary" style="display: none;">Pause Tunes</button> 
+    <div id="controls" style="display: none;">
+    	<button id="toggleTunes" class="btn btn-lg btn-primary">Pause Tunes</button> 
+    	<h2>Volume</h2> <input id="volumeControl" type="range" min="0" max="100" value="100" oninput="changeVolume(this);">
     </div>
     
-	<canvas id="equalizerCanvas"></canvas>
-    <!-- <input type="range" min="0" max="100" value="100" oninput="VolumeSample.changeVolume(this);"> -->
-    
+	<canvas id="equalizerCanvas"></canvas>    
     <script src="scripts/main.js"></script>
 </body>
 </html>

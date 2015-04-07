@@ -6,15 +6,13 @@ var color = 'rgba(88, 197, 67, 0.3)';
 var filesDropped = null;
 var audioIndex = 0;
 
-var player = document.createElement('audio');
 var audio = document.createElement('audio');
 var audioContext = new AudioContext();
 var analyser = audioContext.createAnalyser();
 var animationFrame = null;
 var isPaused = false;
 
-document.body.appendChild(player);
-  audio.addEventListener('ended', function() {
+audio.addEventListener('ended', function() {
   audio.currentTime = 0;
 
   if (audioIndex <= filesDropped.length - 1)
@@ -22,6 +20,14 @@ document.body.appendChild(player);
 });
 source = audioContext.createMediaElementSource(audio);
 source.connect(analyser);
+
+// GAIN
+if (!audioContext.createGain)
+    audioContext.createGain = audioContext.createGainNode;
+
+var gainNode = audioContext.createGain();
+source.connect(gainNode);
+gainNode.connect(audioContext.destination);
 
 function stopEvent (event) {
   event.preventDefault();
@@ -82,11 +88,8 @@ function renderFrame (audio, analyser) {
 function playAudio (file) {
   var url = URL.createObjectURL(file);
   audio.autoplay = true;
-  player.autoplay = true;
   audio.src = url;
-  player.src = url;
   audio.play();
-  player.play();
   $('h1').html(file.name);
   cancelAnimationFrame(animationFrame);
   renderFrame(audio, analyser);
@@ -95,19 +98,17 @@ function playAudio (file) {
 function continueAudio() {
   $('#toggleTunes').html('Pause Tunes');
   audio.play();
-  player.play();
   isPaused = false;
 }
 
 function pauseAudio() {
   $('#toggleTunes').html('Continue Tunes');
   audio.pause();
-  player.pause();
   isPaused = true;
 }
 
 function dropAudio (event) {
-  $('#toggleTunes').fadeIn();
+  $('#controls').fadeIn().css('display', 'flex');
   stopEvent(event);
   filesDropped = event.originalEvent.dataTransfer.files;
   audioIndex = 0;
@@ -119,6 +120,13 @@ function toggleAudio () {
     continueAudio();
   else
     pauseAudio();
+}
+
+function changeVolume(rangeElement) {
+  var volume = rangeElement.value;
+  console.log(volume);
+  var fraction = parseInt(rangeElement.value) / parseInt(rangeElement.max);
+  gainNode.gain.value = fraction * fraction;
 }
 
 setInterval(function() {
@@ -143,6 +151,7 @@ $(window)
     }
   });
 
-$('#toggleTunes').on('click', function() {
-  
+$('#toggleTunes').on('click', function(e) {
+  toggleAudio();
+  this.blur();
 });

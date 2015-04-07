@@ -25,11 +25,14 @@ h2 {
 }
 
 #controls {
-	display: flex;
 	align-items: center;
   	justify-content: center;
 }
 
 #toggleTunes {
 	outline: none;
+}
+
+#volumeControl {
+	width: 200px;
 }
