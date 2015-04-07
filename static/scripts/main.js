@@ -2,8 +2,7 @@
 var output = document.getElementById('output');
 var canvas = document.getElementById('equalizerCanvas');
 var canvasContext = canvas.getContext('2d');
-var colors = ['purple', 'blue', 'green', 'red'];
-var colorIndex = 0;
+var color = 'rgba(88, 197, 67, 0.3)';
 
 var player = document.createElement('audio');
 var audio = document.createElement('audio');
@@ -31,8 +30,8 @@ windowResize();
 
 function reduce (array, size) {
   if (size >= array.length) { return array; }
-  var newArray = [],
-      step = parseInt(array.length / size);
+  var newArray = [];
+  var step = parseInt(array.length / size);
   
   for (var i = 0; i < array.length; i += step) {
     var sum = 0;
@@ -54,7 +53,7 @@ function renderFrame (audio, analyser) {
   var columnHeight = canvas.height / 255;
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   canvasContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
-  canvasContext.strokeStyle = colors[colorIndex];
+  canvasContext.strokeStyle = color;
   canvasContext.lineCap = 'round';
   
   canvasContext.beginPath();
@@ -107,11 +106,16 @@ function dropAudio (event) {
 }
 
 setInterval(function() {
-  if (colorIndex < colors.length - 1)
-    colorIndex++;
-  else
-    colorIndex = 0;
+  var r = getRandomNumberBetween(0, 256);
+  var g = getRandomNumberBetween(0, 256);
+  var b = getRandomNumberBetween(0, 256);
+
+  color = 'rgba(' + r + ', ' + g + ', ' + b + ', 0.6)';
 }, 3000);
+
+function getRandomNumberBetween(from, to) {
+  return Math.floor((Math.random() * to) + from + 1);
+}
 
 $(window)
   .on('dragover', stopEvent)
