@@ -106,14 +106,20 @@ function playAudio (file) {
 }
 
 function continueAudio() {
-  $('#toggleTunes').html('Pause Tunes');
+  $('#toggleTunes > span')
+    .removeClass('glyphicon-play')
+    .addClass('glyphicon-pause');
+
   $('#paused').fadeOut();
   audio.play();
   isPaused = false;
 }
 
 function pauseAudio() {
-  $('#toggleTunes').html('Continue Tunes');
+  $('#toggleTunes > span')
+    .removeClass('glyphicon-pause')
+    .addClass('glyphicon-play');
+    
   $('#paused').fadeIn();
   audio.pause();
   isPaused = true;

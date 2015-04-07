@@ -11,7 +11,9 @@
 <body>
     <h1>Equalizer - Drop a Tune!</h1>
     <div id="controls" style="display: none;">
-    	<button id="toggleTunes" class="btn btn-lg btn-primary">Pause Tunes</button> 
+    	<button id="toggleTunes" class="btn btn-lg btn-primary">
+    		<span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+    	</button> 
     	<h2>Volume</h2> <input id="volumeControl" type="range" min="0" max="100" value="100" oninput="changeVolume(this);">
     	<h2>Samples</h2> <input id="samplesControl" type="range" min="1" max="15" value="5" oninput="changeSamples(this);">
     	<h2>Pan</h2> <input id="panControl" type="range" min="-1" max="1" value="0" oninput="changePan(this);">
