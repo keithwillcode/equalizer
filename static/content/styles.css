@@ -33,6 +33,6 @@ h2 {
 	outline: none;
 }
 
-#volumeControl {
+input[type="range"] {
 	width: 200px;
 }

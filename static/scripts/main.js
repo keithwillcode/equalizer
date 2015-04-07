@@ -5,6 +5,7 @@ var canvasContext = canvas.getContext('2d');
 var color = 'rgba(88, 197, 67, 0.3)';
 var filesDropped = null;
 var audioIndex = 0;
+var sampleSize = 5;
 
 var audio = document.createElement('audio');
 var audioContext = new AudioContext();
@@ -68,7 +69,7 @@ function reduce (array, size) {
 function renderFrame (audio, analyser) {
   var frequencyData = new Uint8Array(analyser.frequencyBinCount);
   analyser.getByteFrequencyData(frequencyData);
-  frequencyData = reduce(frequencyData, canvas.width / 10);
+  frequencyData = reduce(frequencyData, canvas.width / sampleSize);
   
   var columnWidth = canvas.width / frequencyData.length;
   var columnHeight = canvas.height / 255;
@@ -104,12 +105,14 @@ function playAudio (file) {
 
 function continueAudio() {
   $('#toggleTunes').html('Pause Tunes');
+  $('#paused').fadeOut();
   audio.play();
   isPaused = false;
 }
 
 function pauseAudio() {
   $('#toggleTunes').html('Continue Tunes');
+  $('#paused').fadeIn();
   audio.pause();
   isPaused = true;
 }
@@ -134,6 +137,10 @@ function changeVolume(rangeElement) {
   console.log(volume);
   var fraction = parseInt(rangeElement.value) / parseInt(rangeElement.max);
   gainNode.gain.value = fraction * fraction;
+}
+
+function changeSamples(rangeElement) {
+  sampleSize = parseInt(rangeElement.value);
 }
 
 function askForDrop() {
