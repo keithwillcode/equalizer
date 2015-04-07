@@ -8,7 +8,6 @@ var audioIndex = 0;
 
 var audio = document.createElement('audio');
 var audioContext = new AudioContext();
-var analyser = audioContext.createAnalyser();
 var animationFrame = null;
 var isPaused = false;
 
@@ -17,17 +16,28 @@ audio.addEventListener('ended', function() {
 
   if (audioIndex <= filesDropped.length - 1)
     playAudio(filesDropped[audioIndex++]);
+  else
+    askForDrop();
 });
-source = audioContext.createMediaElementSource(audio);
-source.connect(analyser);
 
-// GAIN
+var source = audioContext.createMediaElementSource(audio);
+
 if (!audioContext.createGain)
     audioContext.createGain = audioContext.createGainNode;
 
 var gainNode = audioContext.createGain();
-source.connect(gainNode);
-gainNode.connect(audioContext.destination);
+var analyser = audioContext.createAnalyser();
+
+chainSources();
+
+window.onresize = windowResize;
+windowResize();
+
+function chainSources() {
+  source.connect(gainNode);
+  gainNode.connect(analyser);
+  analyser.connect(audioContext.destination);
+}
 
 function stopEvent (event) {
   event.preventDefault();
@@ -38,9 +48,6 @@ function windowResize () {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
-
-window.onresize = windowResize;
-windowResize();
 
 function reduce (array, size) {
   if (size >= array.length) { return array; }
@@ -127,6 +134,11 @@ function changeVolume(rangeElement) {
   console.log(volume);
   var fraction = parseInt(rangeElement.value) / parseInt(rangeElement.max);
   gainNode.gain.value = fraction * fraction;
+}
+
+function askForDrop() {
+  $('#controls').fadeOut();
+  $('h1').html('Equalizer - Drop a Tune!');
 }
 
 setInterval(function() {
