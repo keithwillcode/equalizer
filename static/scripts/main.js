@@ -110,6 +110,7 @@ function dropAudio (event) {
   $('#toggleTunes').fadeIn();
   stopEvent(event);
   filesDropped = event.originalEvent.dataTransfer.files;
+  audioIndex = 0;
   playAudio(filesDropped[audioIndex++]);
 }
 
