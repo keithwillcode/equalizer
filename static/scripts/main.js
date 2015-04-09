@@ -73,20 +73,35 @@ function renderFrame (audio, analyser) {
   analyser.getByteFrequencyData(frequencyData);
   frequencyData = reduce(frequencyData, canvas.width / sampleSize);
   
-  var columnWidth = canvas.width / frequencyData.length;
-  var columnHeight = canvas.height / 255;
+  var radius = canvas.height / 2;
+  var angle = Math.PI / 2;
+  var wedgeHeightRatio = radius / 255;
+  
+  var circleCenterX = canvas.width / 2;
+  var circleCenterY = canvas.height / 2;
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   canvasContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
   canvasContext.strokeStyle = color;
   canvasContext.lineCap = 'round';
   
   canvasContext.beginPath();
-  canvasContext.moveTo(0, canvas.height);
-  for (var i = 1; i < frequencyData.length; i++) {
-    canvasContext.lineTo(i * columnWidth, canvas.height - 10 - frequencyData[i] * columnHeight);
+  canvasContext.moveTo(circleCenterX, circleCenterY);
+
+  var starting = frequencyData.length * 0.2;
+  var end = frequencyData.length * 0.4;
+  var totalWedges = end - starting;
+  var arcLength = (2 * Math.PI) / totalWedges;
+
+  for (var i = 0; i < end; i++) {
+    var x = Math.cos(angle);
+    var y = Math.sin(angle);
+    var wedgeHeight = frequencyData[parseInt(i)] * wedgeHeightRatio;
+    canvasContext.lineTo(circleCenterX + x, circleCenterY + (y));
+    canvasContext.arc(circleCenterX, circleCenterY, wedgeHeight, angle, angle + arcLength);
+    canvasContext.lineTo(circleCenterX, circleCenterY);
+    angle += arcLength;    
   }
-  canvasContext.lineTo(canvas.width, canvas.height);
-  canvasContext.closePath();
+
   canvasContext.fill();
   canvasContext.stroke();
   
