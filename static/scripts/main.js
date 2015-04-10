@@ -11,6 +11,7 @@ var audio = document.createElement('audio');
 var audioContext = new AudioContext();
 var animationFrame = null;
 var isPaused = false;
+var currentSongDuration = 0;
 
 audio.addEventListener('ended', function() {
   audio.currentTime = 0;
@@ -19,6 +20,11 @@ audio.addEventListener('ended', function() {
     start(filesDropped[audioIndex++]);
   else
     askForDrop();
+});
+
+audio.addEventListener('loadedmetadata', function() {
+  currentSongDuration = audio.duration;
+  $('#seekControl').attr("max", currentSongDuration);
 });
 
 var source = audioContext.createMediaElementSource(audio);
@@ -142,6 +148,10 @@ function toggleAudio () {
     pause();
 }
 
+function seek(rangeElement) {
+  audio.currentTime = Math.ceil(rangeElement.value);
+}
+
 function changeVolume(rangeElement) {
   var volume = rangeElement.value;
   var fraction = parseInt(rangeElement.value) / parseInt(rangeElement.max);
@@ -159,6 +169,7 @@ function changePan(value) {
 function askForDrop() {
   $('#controls').fadeOut();
   $('h1').html('Equalizer - Drop a Tune!');
+  $('#seekControl').val(0);
 }
 
 setInterval(function() {
