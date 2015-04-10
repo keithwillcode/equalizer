@@ -16,7 +16,7 @@ audio.addEventListener('ended', function() {
   audio.currentTime = 0;
 
   if (audioIndex <= filesDropped.length - 1)
-    playAudio(filesDropped[audioIndex++]);
+    start(filesDropped[audioIndex++]);
   else
     askForDrop();
 });
@@ -28,6 +28,7 @@ if (!audioContext.createGain)
 
 var gainNode = audioContext.createGain();
 var panNode = audioContext.createStereoPanner();
+var delayNode = audioContext.createDelay(100.0);
 var analyser = audioContext.createAnalyser();
 
 chainSources();
@@ -39,7 +40,8 @@ function chainSources() {
   source.connect(gainNode);
   gainNode.connect(panNode);
   panNode.connect(analyser);
-  analyser.connect(audioContext.destination);
+  analyser.connect(delayNode);
+  delayNode.connect(audioContext.destination);
 }
 
 function stopEvent (event) {
@@ -75,13 +77,15 @@ function renderFrame (audio, analyser) {
   
   var columnWidth = canvas.width / frequencyData.length;
   var columnHeight = canvas.height / 255;
+  
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   canvasContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
   canvasContext.strokeStyle = color;
   canvasContext.lineCap = 'round';
-  
+
   canvasContext.beginPath();
   canvasContext.moveTo(0, canvas.height);
+
   for (var i = 1; i < frequencyData.length; i++) {
     canvasContext.lineTo(i * columnWidth, canvas.height - 10 - frequencyData[i] * columnHeight);
   }
@@ -95,17 +99,17 @@ function renderFrame (audio, analyser) {
   });
 }
 
-function playAudio (file) {
+function start (file) {
   var url = URL.createObjectURL(file);
   audio.autoplay = true;
   audio.src = url;
-  audio.play();
+  play();
   $('h1').html(file.name);
   cancelAnimationFrame(animationFrame);
   renderFrame(audio, analyser);
 }
 
-function continueAudio() {
+function play() {
   $('#toggleTunes > span')
     .removeClass('glyphicon-play')
     .addClass('glyphicon-pause');
@@ -115,7 +119,7 @@ function continueAudio() {
   isPaused = false;
 }
 
-function pauseAudio() {
+function pause() {
   $('#toggleTunes > span')
     .removeClass('glyphicon-pause')
     .addClass('glyphicon-play');
@@ -130,14 +134,14 @@ function dropAudio (event) {
   stopEvent(event);
   filesDropped = event.originalEvent.dataTransfer.files;
   audioIndex = 0;
-  playAudio(filesDropped[audioIndex++]);
+  start(filesDropped[audioIndex++]);
 }
 
 function toggleAudio () {
   if (isPaused)
-    continueAudio();
+    play();
   else
-    pauseAudio();
+    pause();
 }
 
 function changeVolume(rangeElement) {
