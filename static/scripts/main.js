@@ -28,8 +28,6 @@ if (!audioContext.createGain)
 
 var gainNode = audioContext.createGain();
 var panNode = audioContext.createStereoPanner();
-var delayNode = audioContext.createDelay();
-delayNode.delayTime.value = 5.0;
 var analyser = audioContext.createAnalyser();
 
 chainSources();
@@ -41,8 +39,7 @@ function chainSources() {
   source.connect(gainNode);
   gainNode.connect(panNode);
   panNode.connect(analyser);
-  analyser.connect(delayNode);
-  delayNode.connect(audioContext.destination);
+  analyser.connect(audioContext.destination);
 }
 
 function stopEvent (event) {
@@ -71,8 +68,7 @@ function reduce (array, size) {
   return newArray;
 }
 
-function renderFrame (audio, analyser) {  
-  delayNode.delayTime.value = 0;
+function renderFrame (audio, analyser) {
   var frequencyData = new Uint8Array(analyser.frequencyBinCount);
   analyser.getByteFrequencyData(frequencyData);
   frequencyData = reduce(frequencyData, canvas.width / sampleSize);
