@@ -11,14 +11,20 @@ var audio = document.createElement('audio');
 var audioContext = new AudioContext();
 var animationFrame = null;
 var isPaused = false;
+var currentSongDuration = 0;
 
 audio.addEventListener('ended', function() {
   audio.currentTime = 0;
 
   if (audioIndex <= filesDropped.length - 1)
-    playAudio(filesDropped[audioIndex++]);
+    start(filesDropped[audioIndex++]);
   else
     askForDrop();
+});
+
+audio.addEventListener('loadedmetadata', function() {
+  currentSongDuration = audio.duration;
+  $('#seekControl').attr("max", currentSongDuration);
 });
 
 var source = audioContext.createMediaElementSource(audio);
@@ -78,13 +84,15 @@ function renderFrame (audio, analyser) {
   
   var columnWidth = canvas.width / frequencyData.length;
   var columnHeight = canvas.height / 255;
+  
   canvasContext.clearRect(0, 0, canvas.width, canvas.height);
   canvasContext.fillStyle = 'rgba(0, 0, 0, 0.3)';
   canvasContext.strokeStyle = color;
   canvasContext.lineCap = 'round';
-  
+
   canvasContext.beginPath();
   canvasContext.moveTo(0, canvas.height);
+
   for (var i = 1; i < frequencyData.length; i++) {
     canvasContext.lineTo(i * columnWidth, canvas.height - 10 - frequencyData[i] * columnHeight);
   }
@@ -98,17 +106,17 @@ function renderFrame (audio, analyser) {
   });
 }
 
-function playAudio (file) {
+function start (file) {
   var url = URL.createObjectURL(file);
   audio.autoplay = true;
   audio.src = url;
-  audio.play();
+  play();
   $('h1').html(file.name);
   cancelAnimationFrame(animationFrame);
   renderFrame(audio, analyser);
 }
 
-function continueAudio() {
+function play() {
   $('#toggleTunes > span')
     .removeClass('glyphicon-play')
     .addClass('glyphicon-pause');
@@ -118,7 +126,7 @@ function continueAudio() {
   isPaused = false;
 }
 
-function pauseAudio() {
+function pause() {
   $('#toggleTunes > span')
     .removeClass('glyphicon-pause')
     .addClass('glyphicon-play');
@@ -133,14 +141,18 @@ function dropAudio (event) {
   stopEvent(event);
   filesDropped = event.originalEvent.dataTransfer.files;
   audioIndex = 0;
-  playAudio(filesDropped[audioIndex++]);
+  start(filesDropped[audioIndex++]);
 }
 
 function toggleAudio () {
   if (isPaused)
-    continueAudio();
+    play();
   else
-    pauseAudio();
+    pause();
+}
+
+function seek(rangeElement) {
+  audio.currentTime = Math.ceil(rangeElement.value);
 }
 
 function changeVolume(rangeElement) {
@@ -160,6 +172,7 @@ function changePan(value) {
 function askForDrop() {
   $('#controls').fadeOut();
   $('h1').html('Equalizer - Drop a Tune!');
+  $('#seekControl').val(0);
 }
 
 setInterval(function() {
