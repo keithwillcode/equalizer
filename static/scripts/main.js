@@ -26,6 +26,9 @@ var source = audioContext.createMediaElementSource(audio);
 if (!audioContext.createGain)
     audioContext.createGain = audioContext.createGainNode;
 
+if (!audioContext.createStereoPanner)
+    audioContext.createStereoPanner = audioContext.createPanner;
+
 var gainNode = audioContext.createGain();
 var panNode = audioContext.createStereoPanner();
 var analyser = audioContext.createAnalyser();
