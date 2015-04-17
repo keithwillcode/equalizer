@@ -1,7 +1,7 @@
 # equalizer
 An audio equalizer written in JavaScript
 
-Resources
+#Resources
 http://updates.html5rocks.com/2012/06/Don-t-Build-Blobs-Construct-Them
 https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode
 https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
